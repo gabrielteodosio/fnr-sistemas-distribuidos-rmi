@@ -15,6 +15,6 @@ public class HelloServant extends UnicastRemoteObject implements HelloService {
 
   @Override
   public String echo(String input) throws RemoteException {
-    return "From server: " + input + this.getClass().getName();
+    return "From server: " + input;
   }
 }
