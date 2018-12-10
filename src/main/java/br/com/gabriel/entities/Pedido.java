@@ -24,7 +24,7 @@ public class Pedido implements Entity {
     this.bicycles = new ArrayList<>();
     this.bicycles.addAll(Arrays.asList(bicycles));
     this.toDeliver = LocalDate.now();
-    this.toDeliver.plusDays(10);
+    this.toDeliver.plusDays(1);
     this.status = DeliveryStatus.PENDENT;
   }
 

@@ -7,14 +7,18 @@ package br.com.gabriel.projects.fabrikam;
 
 import br.com.gabriel.entities.Bicycle;
 import br.com.gabriel.entities.Pedido;
-import br.com.gabriel.enums.DeliveryStatus;
 import br.com.gabriel.projects.duwawish.dao.Dao;
 import br.com.gabriel.projects.duwawish.dao.DaoImpl;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import org.joda.time.Days;
 
 /**
  *
@@ -48,13 +52,22 @@ public class FabrikamServant extends UnicastRemoteObject implements FabrikamServ
         System.out.println(ex.getMessage());
       }
 
-      System.out.println("Pedido criado com sucesso! [#" + pedido.getId() + "]");
+      System.out.println("\nPedido criado com sucesso! [#" + pedido.getId() + "]");
+      System.out.println("\n\t ====== Status ======");
     });
   }
 
   @Override
-  public DeliveryStatus getStatus(long id) {
-    Pedido pedido = peDao.get(id);
-    return pedido.getStatus();
+  public Map<String, Days> getStatus(long id) {
+    Map<String, Days> data = null;
+
+    try {
+      FabrikamService service = (FabrikamService) Naming.lookup("rmi://localhost:5097/duwawish");
+      data = service.getStatus(id);
+    } catch (NotBoundException | MalformedURLException | RemoteException ex) {
+      System.out.println("Deu ruim");
+    }
+
+    return data;
   }
 }

@@ -1,7 +1,6 @@
 package br.com.gabriel.projects.adventureworks;
 
 import br.com.gabriel.entities.Bicycle;
-import br.com.gabriel.enums.DeliveryStatus;
 import br.com.gabriel.projects.duwawish.dao.Dao;
 import br.com.gabriel.projects.duwawish.dao.DaoImpl;
 import br.com.gabriel.projects.fabrikam.FabrikamService;
@@ -10,7 +9,9 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import org.joda.time.Days;
 
 /**
  *
@@ -36,11 +37,10 @@ public class Client {
 
         System.out.print("\nQual o modelo vc quer?\n> ");
         String input = in.nextLine();
-        Long option = Long.parseLong(input);
 
         // Ask for exiting
         if (input.trim().equalsIgnoreCase("sair")) {
-          System.out.println("Saindo");
+          System.out.println("\nSaindo...");
           System.exit(0);
         }
 
@@ -51,22 +51,26 @@ public class Client {
 
           // Gets order status
           FabrikamService service = (FabrikamService) Naming.lookup("rmi://localhost:5099/fabrikam");
-          DeliveryStatus status = service.getStatus(Long.parseLong(input));
-          System.out.println("Status de seu pedido [#" + input + "] -> " + status.getValue());
+          Map<String, Days> status = service.getStatus(Long.parseLong(input));
+          
+          System.out.println(status.keySet().iterator().next());
+          System.out.println("Faltam " + status.values().iterator().next() + " dias para a entrega.");
           continue;
         }
+        
+        Long option = Long.parseLong(input);
 
         // Ask for telephone number
         System.out.print("\nQual seu telefone\n> ");
         input = in.nextLine();
 
-        System.out.println("Opção selecionada: #" + option + "; Telefone: " + input + ";");
+        System.out.println("\nOpção selecionada: #" + option + "; Telefone: " + input + ";");
 
         // Creates new order
         FabrikamService service = (FabrikamService) Naming.lookup("rmi://localhost:5099/fabri");
         service.novoPedido(option, input);
 
-        System.out.println("\t====== New Order! [#" + option + "] ====== ");
+        System.out.println("\n\t====== New Order! [#" + option + "] ====== \n");
       }
     } catch (NotBoundException | MalformedURLException | RemoteException ex) {
       System.out.println(ex.getMessage());
