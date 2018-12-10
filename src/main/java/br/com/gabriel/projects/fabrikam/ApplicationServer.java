@@ -10,8 +10,18 @@ import java.rmi.registry.Registry;
  */
 public class ApplicationServer {
 
-  public static void main(String[] args) throws RemoteException {
-    Registry registry = LocateRegistry.createRegistry(5001);
-    registry.rebind("hello", new FabrikamServant());
+  public static void main(String[] args) {
+    Integer port = 5099;
+    String name = "fabri";
+    
+    try {
+      System.out.println(name + " running on port: " + port);
+      
+      Registry registry = LocateRegistry.createRegistry(port);
+      registry.rebind(name, new FabrikamServant());
+      
+    } catch (RemoteException ex) {
+      System.out.println(ex.getMessage());
+    }
   }
 }

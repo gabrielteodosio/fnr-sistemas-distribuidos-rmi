@@ -12,7 +12,7 @@ public class ApplicationServer {
   
   public static void main(String[] args) {
     try {
-      Registry registry = LocateRegistry.createRegistry(5099);
+      Registry registry = LocateRegistry.createRegistry(5098);
       registry.rebind("hello", new HelloServant());
     } catch (RemoteException ex) {
       System.out.println("Deu merda");

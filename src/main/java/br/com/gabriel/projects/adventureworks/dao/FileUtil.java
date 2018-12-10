@@ -1,4 +1,4 @@
-package br.com.gabriel.projects.duwawish.dao;
+package br.com.gabriel.projects.adventureworks.dao;
 
 import br.com.gabriel.entities.Bicycle;
 import java.io.BufferedReader;
@@ -13,12 +13,12 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArquivoUtil<T extends Bicycle> {
+public class FileUtil<T extends Bicycle> {
 
   private File arquivo;
   Class<? extends T> clazz;
 
-  public ArquivoUtil(Class<? extends T> clazz) {
+  public FileUtil(Class<? extends T> clazz) {
     this.clazz = clazz;
     this.arquivo = new File(this.clazz.getSimpleName() + ".txt");
   }

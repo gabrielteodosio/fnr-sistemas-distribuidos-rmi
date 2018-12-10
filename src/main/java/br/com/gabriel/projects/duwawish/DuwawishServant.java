@@ -1,6 +1,7 @@
 package br.com.gabriel.projects.duwawish;
 
 import br.com.gabriel.entities.Bicycle;
+import br.com.gabriel.entities.Pedido;
 import br.com.gabriel.projects.duwawish.dao.Dao;
 import br.com.gabriel.projects.duwawish.dao.DaoImpl;
 import java.rmi.RemoteException;
@@ -16,7 +17,7 @@ import org.joda.time.LocalDate;
  */
 public class DuwawishServant extends UnicastRemoteObject implements DuwawishService {
 
-  private Dao<Bicycle> dao = new DaoImpl<>(Bicycle.class);
+  private Dao<Pedido> daoPedido = new DaoImpl<>(Pedido.class);
 
   public DuwawishServant() throws RemoteException {
     super();
@@ -26,14 +27,16 @@ public class DuwawishServant extends UnicastRemoteObject implements DuwawishServ
   public Map<String, Days> getStatus(Long id) throws RemoteException {
     Map<String, Days> bMap = new HashMap<>();
 
-    Bicycle bicycle = dao.get(id);
+    Pedido pedido = daoPedido.get(id);
+    Bicycle bicycle = pedido.getBicycles().iterator().next();
     
     LocalDate now = new LocalDate();
-    LocalDate bicycleDeliverDate = new LocalDate(bicycle.getToDeliver());
+    LocalDate bicycleDeliverDate = pedido.getToDeliver();
+    
     Days days = Days.daysBetween(bicycleDeliverDate, now);
     
     bMap.put(
-      bicycle.getId() + " - " + bicycle.getPrice() + " - cor: " + bicycle.getColor() + " [" + bicycle.getDeliveryStatus().getValue() + "]",
+      bicycle.getId() + " - " + bicycle.getPrice() + " - cor: " + bicycle.getColor() + " [" + pedido.getStatus().getValue() + "]",
       days
     );
 

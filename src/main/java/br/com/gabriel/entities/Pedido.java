@@ -1,8 +1,10 @@
 package br.com.gabriel.entities;
 
-import java.io.Serializable;
+import br.com.gabriel.enums.DeliveryStatus;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.joda.time.LocalDate;
 
 /**
  *
@@ -10,19 +12,40 @@ import java.util.List;
  */
 public class Pedido implements Entity {
 
-  private List<Bicycle> bicycles;
-  private Integer id;
+  private final List<Bicycle> bicycles;
+  private final Long id;
+  private final LocalDate toDeliver;
+  private final DeliveryStatus status;
+  private final String phoneNumber;
   
-  public Pedido(Bicycle... bicycles) {
-    this.bicycles = Arrays.asList(bicycles);
+  public Pedido(Long id, String phoneNumber,Bicycle... bicycles) {
+    this.id = id;
+    this.phoneNumber = phoneNumber;
+    this.bicycles = new ArrayList<>();
+    this.bicycles.addAll(Arrays.asList(bicycles));
+    this.toDeliver = LocalDate.now();
+    this.toDeliver.plusDays(10);
+    this.status = DeliveryStatus.PENDENT;
   }
 
+  public String getPhoneNumber() {
+    return this.phoneNumber;
+  }
+  
   public List<Bicycle> getBicycles() {
-    return bicycles;
+    return this.bicycles;
   }
 
   @Override
-  public Integer getId() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Long getId() {
+    return this.id;
+  }
+
+  public LocalDate getToDeliver() {
+    return this.toDeliver;
+  }
+
+  public DeliveryStatus getStatus() {
+    return this.status;
   }
 }

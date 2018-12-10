@@ -13,7 +13,7 @@ public class Client {
   
   public static void main(String[] args) {
     try {
-      HelloService service = (HelloService) Naming.lookup("rmi://localhost:5099/hello");
+      HelloService service = (HelloService) Naming.lookup("rmi://localhost:5098/hello");
       System.out.println("--- " + service.echo("Hey server"));
     } catch (RemoteException | NotBoundException | MalformedURLException ex) {
       System.out.println("Deu merda");

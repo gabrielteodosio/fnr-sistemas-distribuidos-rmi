@@ -1,6 +1,6 @@
 package br.com.gabriel.projects.duwawish.dao;
 
-import br.com.gabriel.entities.Bicycle;
+import br.com.gabriel.entities.Entity;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,14 +8,14 @@ import java.util.List;
  *
  * @author gabri
  */
-public class DaoImpl<T extends Bicycle> implements Dao<T> {
+public class DaoImpl<T extends Entity> implements Dao<T> {
 
-  private ArquivoUtil<T> util;
+  private FileUtil<T> util;
   private Class<? extends T> clazz;
 
   public DaoImpl(Class<? extends T> clazz) {
     this.clazz = clazz;
-    util = new ArquivoUtil<>(this.clazz);
+    util = new FileUtil<>(this.clazz);
   }
 
   @Override
@@ -61,6 +61,18 @@ public class DaoImpl<T extends Bicycle> implements Dao<T> {
   public void update(T obj) {
     remove(obj.getId());
     create(obj);
+  }
+
+  @Override
+  public void create(T... obj) {
+    for (T t : obj) {
+      create(t);
+    }
+  }
+
+  @Override
+  public List<T> getAll() {
+    return util.read();
   }
 
 }
